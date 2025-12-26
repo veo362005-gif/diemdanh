@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Điểm danh Đảng ủy Phường Đông Hưng Thuận</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border-top: 10px solid #da251d; }
+        .header { background-color: #da251d; color: #ffff00; text-align: center; padding: 20px; }
+        .header h1 { margin: 0; font-size: 18px; text-transform: uppercase; }
+        form { padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #333; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .chuyen-de-box { background-color: #fff9e6; padding: 10px; border: 1px solid #ffeaa7; border-radius: 5px; }
+        .chuyen-de-item { display: flex; align-items: flex-start; margin-bottom: 8px; font-size: 14px; }
+        .chuyen-de-item input { margin-top: 3px; margin-right: 10px; }
+        button { width: 100%; background-color: #da251d; color: #ffff00; padding: 12px; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        button:disabled { background-color: #ccc; color: #666; }
+        .footer { text-align: center; font-size: 11px; color: #777; margin-top: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>ĐẢNG ỦY PHƯỜNG ĐÔNG HƯNG THUẬN</h1>
+        <p style="margin:5px 0 0; font-weight:bold;">ĐIỂM DANH TẬP HUẤN SỐ</p>
+    </div>
+    <form id="attendanceForm">
+        <div class="form-group">
+            <label>Họ và Tên:</label>
+            <input type="text" name="fullname" required placeholder="Nhập họ tên...">
+        </div>
+        <div class="form-group">
+            <label>Chức vụ:</label>
+            <input type="text" name="position" required placeholder="Ví dụ: Bí thư Chi bộ...">
+        </div>
+        <div class="form-group">
+            <label>Đơn vị:</label>
+            <input type="text" name="unit" required placeholder="Ví dụ: Tổ dân phố 1...">
+        </div>
+        <label>Chọn Chuyên đề tham gia:</label>
+        <div class="chuyen-de-box">
+            <div class="chuyen-de-item"><input type="checkbox" name="topic" value="CĐ 1" id="c1"> <label for="c1">CĐ 1: Vai trò, kỹ năng Tổ số cộng đồng</label></div>
+            <div class="chuyen-de-item"><input type="checkbox" name="topic" value="CĐ 2" id="c2"> <label for="c2">CĐ 2: Dịch vụ công & Tiện ích số</label></div>
+            <div class="chuyen-de-item"><input type="checkbox" name="topic" value="CĐ 3" id="c3"> <label for="c3">CĐ 3: An toàn số cộng đồng</label></div>
+            <div class="chuyen-de-item"><input type="checkbox" name="topic" value="CĐ 4" id="c4"> <label for="c4">CĐ 4: Truyền thông số & AI</label></div>
+        </div>
+        <br>
+        <button type="submit" id="submitBtn">GỬI ĐIỂM DANH</button>
+    </form>
+</div>
+<div class="footer">© 2025 Đảng ủy Phường Đông Hưng Thuận</div>
+
+<script>
+    // https://script.google.com/macros/s/AKfycby0X8yvi1FAsy-ry_nrAWcmLMfQ0tnXZCZqqtPuaDIN_NPagWf3xk4EYLmzyQZ1hNki/exec
+    const scriptURL = 'https://script.google.com/macros/s/AKfycby0X8yvi1FAsy-ry_nrAWcmLMfQ0tnXZCZqqtPuaDIN_NPagWf3xk4EYLmzyQZ1hNki/exec';
+    const form = document.getElementById('attendanceForm');
+    const btn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        btn.disabled = true;
+        btn.innerHTML = "Đang gửi...";
+
+        let topics = [];
+        document.querySelectorAll('input[name="topic"]:checked').forEach(cb => topics.push(cb.value));
+        
+        const formData = new FormData();
+        formData.append('fullname', form.fullname.value);
+        formData.append('position', form.position.value);
+        formData.append('unit', form.unit.value);
+        formData.append('topics', topics.join(", "));
+
+        fetch(scriptURL, { method: 'POST', body: formData})
+            .then(res => {
+                alert('Đã điểm danh thành công!');
+                form.reset();
+                btn.disabled = false;
+                btn.innerHTML = "GỬI ĐIỂM DANH";
+            })
+            .catch(err => {
+                alert('Lỗi: ' + err.message);
+                btn.disabled = false;
+                btn.innerHTML = "GỬI ĐIỂM DANH";
+            });
+    });
+</script>
+</body>
+</html>
